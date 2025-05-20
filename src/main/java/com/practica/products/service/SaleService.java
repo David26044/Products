@@ -48,7 +48,7 @@ public class SaleService implements ISaleService{
     @Override
     public SaleEntity saveSale(SaleDTO saleDTO) {
         // Crear la venta que voy a settear y guardar
-        SaleEntity saleSaved = saleRepository.save(new SaleEntity());
+        SaleEntity saleSaved = new SaleEntity();
 
         //Lista de detalles que voy a llenar y luego settear en la venta
         List<SaleDetailEntity> details = new ArrayList<>();
@@ -92,11 +92,11 @@ public class SaleService implements ISaleService{
             //Primero la pk
             SaleDetailPK pk = new SaleDetailPK();
             pk.setProductId(product.getId());
-            pk.setSaleId(saleSaved.getId()); //Se asigna al almacenar la venta
 
             //Seteo los valores del detalle
             detailEntity.setId(pk);
             detailEntity.setProduct(product);
+            detailEntity.setSale(saleSaved);
             detailEntity.setUnitPrice(product.getPrice());
             detailEntity.setQuantity(saleDetail.getQuantity());
             detailEntity.setSubtotal(product.getPrice().multiply(BigDecimal.valueOf(saleDetail.getQuantity())));
@@ -106,6 +106,9 @@ public class SaleService implements ISaleService{
             details.add(detailEntity);
         }
 
+        for(SaleDetailEntity detail: details){
+            productService.reduceStock(detail.getProduct(), detail.getQuantity());
+        }
 
         saleSaved.setDetails(details);
         saleSaved.setTotal(total);

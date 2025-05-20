@@ -1,5 +1,6 @@
 package com.practica.products.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -20,6 +21,7 @@ public class SaleDetailEntity implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("saleId")
     @JoinColumn(name = "sale_id", insertable = false, updatable = false)
+    @JsonBackReference
     private SaleEntity sale;
 
     @Column(name = "unit_price")
