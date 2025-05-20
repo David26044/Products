@@ -13,12 +13,12 @@ public class SaleDetailEntity implements Serializable {
     @EmbeddedId
     private SaleDetailPK id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("productId")
     @JoinColumn(name = "product_id", insertable = false, updatable = false)
     private ProductEntity product;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("saleId")
     @JoinColumn(name = "sale_id", insertable = false, updatable = false)
     @JsonBackReference
