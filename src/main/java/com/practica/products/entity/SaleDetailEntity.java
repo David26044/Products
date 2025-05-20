@@ -15,12 +15,12 @@ public class SaleDetailEntity implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("productId")
-    @JoinColumn(name = "product_id", insertable = false, updatable = false)
+    @JoinColumn(name = "product_id")
     private ProductEntity product;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("saleId")
-    @JoinColumn(name = "sale_id", insertable = false, updatable = false)
+    @JoinColumn(name = "sale_id")
     @JsonBackReference
     private SaleEntity sale;
 
