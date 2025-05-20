@@ -1,6 +1,8 @@
 package com.practica.products.service;
 
 import com.practica.products.entity.ProductEntity;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface IProductService {
@@ -12,6 +14,6 @@ public interface IProductService {
     ProductEntity deleteProductByProductId(Long id);
     ProductEntity updateProduct(ProductEntity product);
     ProductEntity partialUpdateProducy(ProductEntity product);
-
-
+    List<ProductEntity> getProductsByIds(List<Long> productIds);
+    void reduceStock(ProductEntity product, Integer quantity);
 }
