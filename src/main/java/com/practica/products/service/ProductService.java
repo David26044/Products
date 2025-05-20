@@ -8,7 +8,6 @@ import com.practica.products.exception.ResourceAlreadyExistsException;
 import com.practica.products.exception.ResourceNotFoundException;
 import com.practica.products.repository.ProductRepository;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Service

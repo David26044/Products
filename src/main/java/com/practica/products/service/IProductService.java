@@ -1,8 +1,6 @@
 package com.practica.products.service;
 
 import com.practica.products.entity.ProductEntity;
-
-import java.math.BigDecimal;
 import java.util.List;
 
 public interface IProductService {

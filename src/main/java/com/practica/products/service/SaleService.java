@@ -9,7 +9,6 @@ import com.practica.products.entity.SaleEntity;
 import com.practica.products.exception.InsufficientStockException;
 import com.practica.products.exception.ResourceNotFoundException;
 import com.practica.products.repository.ProductRepository;
-import com.practica.products.repository.SaleDetailRepository;
 import com.practica.products.repository.SaleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

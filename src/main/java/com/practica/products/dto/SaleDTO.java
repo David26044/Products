@@ -1,6 +1,5 @@
 package com.practica.products.dto;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public class SaleDTO {

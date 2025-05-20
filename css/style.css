@@ -1,0 +1,28 @@
+.admin-products {
+    padding: 20px;
+  }
+  
+  .admin-products__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .admin-products__title {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .admin-products__add-button {
+    font-size: 16px;
+  }
+  
+  .admin-products__table-section {
+    margin-bottom: 20px;
+  }
+  
+  .admin-products__pagination {
+    margin-top: 20px;
+  }
+  
