@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const addProductButton = document.getElementById("addProductButton");
   const selectedProductsTableBody = document.getElementById("selectedProductsTableBody");
 
-  let salesDistributionChart, salesTotalChart;
+  let salesDistributionChart, salesTotalChart, salesOverTimeChart, topSellingProductsChart, revenueByProductChart;
   let selectedProducts = [];
 
   // Función para cargar los productos desde el backend
@@ -118,11 +118,19 @@ document.addEventListener("DOMContentLoaded", () => {
       // Llenar la tabla con las ventas
       sales.forEach((sale) => {
         const row = document.createElement("tr");
+
+        // Formatear los detalles de la venta
+        const formattedDetails = sale.details
+          .map(detail => 
+            `${detail.product.name} (Cantidad: ${detail.quantity}, Subtotal: ${detail.subtotal.toFixed(2)})`
+          )
+          .join("<br>");
+
         row.innerHTML = `
           <td>${sale.id}</td>
           <td>${new Date(sale.date).toLocaleString()}</td>
-          <td>${sale.total}</td>
-          <td>${JSON.stringify(sale.details)}</td>
+          <td>${sale.total.toFixed(2)}</td>
+          <td>${formattedDetails}</td>
         `;
         salesTableBody.appendChild(row);
       });
@@ -136,51 +144,131 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Función para inicializar las gráficas
   const initializeCharts = () => {
-    const salesDistributionCtx = document.getElementById("salesDistributionChart").getContext("2d");
-    const salesTotalCtx = document.getElementById("salesTotalChart").getContext("2d");
+    const salesOverTimeCtx = document.getElementById("salesOverTimeChart").getContext("2d");
+    const topSellingProductsCtx = document.getElementById("topSellingProductsChart").getContext("2d");
+    const revenueByProductCtx = document.getElementById("revenueByProductChart").getContext("2d");
 
-    salesDistributionChart = new Chart(salesDistributionCtx, {
-      type: "pie",
+    salesOverTimeChart = new Chart(salesOverTimeCtx, {
+      type: "line",
       data: {
         labels: [],
         datasets: [{
-          label: "Distribución de Ventas",
+          label: "Ventas Totales",
           data: [],
-          backgroundColor: ["#007bff", "#28a745", "#ffc107", "#dc3545"],
+          borderColor: "#007bff",
+          backgroundColor: "rgba(0, 123, 255, 0.2)",
+          borderWidth: 2,
+          tension: 0.4,
+          pointBackgroundColor: "#007bff",
+          pointBorderColor: "#fff",
+          pointHoverRadius: 6,
         }],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: true, position: "top" },
+          tooltip: { enabled: true, backgroundColor: "#333", titleColor: "#fff", bodyColor: "#fff" },
+        },
+        scales: {
+          x: { grid: { display: false } },
+          y: { grid: { color: "#e9ecef" }, beginAtZero: true },
+        },
       },
     });
 
-    salesTotalChart = new Chart(salesTotalCtx, {
+    topSellingProductsChart = new Chart(topSellingProductsCtx, {
       type: "bar",
       data: {
         labels: [],
         datasets: [{
-          label: "Totales de Ventas",
+          label: "Productos Más Vendidos",
           data: [],
-          backgroundColor: "#007bff",
+          backgroundColor: ["#007bff", "#28a745", "#ffc107", "#dc3545", "#6f42c1"],
+          borderColor: "#fff",
+          borderWidth: 1,
         }],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: { enabled: true, backgroundColor: "#333", titleColor: "#fff", bodyColor: "#fff" },
+        },
+        scales: {
+          x: { grid: { display: false } },
+          y: { grid: { color: "#e9ecef" }, beginAtZero: true },
+        },
+      },
+    });
+
+    revenueByProductChart = new Chart(revenueByProductCtx, {
+      type: "pie",
+      data: {
+        labels: [],
+        datasets: [{
+          label: "Ingresos por Producto",
+          data: [],
+          backgroundColor: ["#007bff", "#28a745", "#ffc107", "#dc3545", "#6f42c1"],
+          borderColor: "#fff",
+          borderWidth: 2,
+        }],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: true, position: "right" },
+          tooltip: { enabled: true, backgroundColor: "#333", titleColor: "#fff", bodyColor: "#fff" },
+        },
       },
     });
   };
 
   // Función para actualizar las gráficas
   const updateCharts = (sales) => {
-    // Actualizar datos de distribución de ventas
-    const distributionLabels = sales.map((sale) => `Venta ${sale.id}`);
-    const distributionData = sales.map((sale) => sale.details.length);
+    // Ventas totales a lo largo del tiempo
+    const salesDates = sales.map((sale) => new Date(sale.date).toLocaleDateString());
+    const salesTotals = sales.map((sale) => sale.total);
 
-    salesDistributionChart.data.labels = distributionLabels;
-    salesDistributionChart.data.datasets[0].data = distributionData;
-    salesDistributionChart.update();
+    salesOverTimeChart.data.labels = salesDates;
+    salesOverTimeChart.data.datasets[0].data = salesTotals;
+    salesOverTimeChart.update();
 
-    // Actualizar datos de totales de ventas
-    const totalLabels = sales.map((sale) => `Venta ${sale.id}`);
-    const totalData = sales.map((sale) => sale.total);
+    // Productos más vendidos
+    const productQuantities = {};
+    sales.forEach((sale) => {
+      sale.details.forEach((detail) => {
+        if (!productQuantities[detail.product.name]) {
+          productQuantities[detail.product.name] = 0;
+        }
+        productQuantities[detail.product.name] += detail.quantity;
+      });
+    });
 
-    salesTotalChart.data.labels = totalLabels;
-    salesTotalChart.data.datasets[0].data = totalData;
-    salesTotalChart.update();
+    const topProducts = Object.entries(productQuantities)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5);
+
+    topSellingProductsChart.data.labels = topProducts.map(([name]) => name);
+    topSellingProductsChart.data.datasets[0].data = topProducts.map(([_, quantity]) => quantity);
+    topSellingProductsChart.update();
+
+    // Ingresos por producto
+    const productRevenues = {};
+    sales.forEach((sale) => {
+      sale.details.forEach((detail) => {
+        if (!productRevenues[detail.product.name]) {
+          productRevenues[detail.product.name] = 0;
+        }
+        productRevenues[detail.product.name] += detail.subtotal;
+      });
+    });
+
+    const revenueData = Object.entries(productRevenues);
+
+    revenueByProductChart.data.labels = revenueData.map(([name]) => name);
+    revenueByProductChart.data.datasets[0].data = revenueData.map(([_, revenue]) => revenue);
+    revenueByProductChart.update();
   };
 
   // Inicializar las gráficas al cargar la página
