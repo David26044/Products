@@ -1,5 +1,6 @@
 package com.practica.products.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -22,6 +23,7 @@ public class SaleEntity implements Serializable {
     private BigDecimal total;
 
     @OneToMany(mappedBy = "sale", cascade = CascadeType.PERSIST)
+    @JsonManagedReference
     private List<SaleDetailEntity> details;
 
     public SaleEntity(Long id, LocalDateTime date, BigDecimal total) {
