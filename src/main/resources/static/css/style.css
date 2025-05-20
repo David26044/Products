@@ -1,31 +1,83 @@
+body {
+  background-color: #f8f9fa;
+}
+
 .admin-products {
-    padding: 20px;
-  }
-  
-  .admin-products__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  
-  .admin-products__title {
-    font-size: 24px;
-    font-weight: bold;
-  }
-  
-  .admin-products__add-button {
-    font-size: 16px;
-  }
-  
-  .admin-products__table-section {
-    margin-bottom: 20px;
-  }
-  
-  .admin-products__pagination {
-    margin-top: 20px;
-  }
-  
-  .modal-content {
-    border-radius: 8px;
-  }
+  padding: 20px;
+}
+
+.admin-products__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.admin-products__title {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.admin-products__add-button {
+  font-size: 16px;
+}
+
+.admin-products__table-section {
+  margin-bottom: 20px;
+}
+
+.admin-products__table {
+  background-color: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.admin-products__pagination {
+  margin-top: 20px;
+}
+
+.sales {
+  padding: 20px;
+}
+
+.sales__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.sales__title {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.sales__add-button {
+  font-size: 16px;
+}
+
+.sales__table-section {
+  margin-bottom: 20px;
+}
+
+.sales__table {
+  background-color: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.sales__charts {
+  margin-top: 20px;
+}
+
+.modal-content {
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+footer {
+  background-color: #343a40;
+  color: #ffffff;
+}
