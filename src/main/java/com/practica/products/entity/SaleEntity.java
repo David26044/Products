@@ -18,7 +18,7 @@ public class SaleEntity implements Serializable {
     @Column
     private LocalDateTime date = LocalDateTime.now();
 
-    @Column
+    @Column(nullable=true)
     private BigDecimal total;
 
     @OneToMany(mappedBy = "sale", cascade = CascadeType.PERSIST)
@@ -28,6 +28,14 @@ public class SaleEntity implements Serializable {
         this.id = id;
         this.date = date;
         this.total = total;
+    }
+
+    public List<SaleDetailEntity> getDetails() {
+        return details;
+    }
+
+    public void setDetails(List<SaleDetailEntity> details) {
+        this.details = details;
     }
 
     public SaleEntity(){}
